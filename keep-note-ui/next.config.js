@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    apiURL: 'https://localhost:7160/api/notes',
-  }
+    apiURL: 'https://keepnoteapi.barissamur.com/api/notes',
+  },
+  output: 'export'
 }
 
 module.exports = nextConfig

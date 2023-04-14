@@ -1,0 +1,65 @@
+db ve domain lazım
+
+subdomain ekle
+
+dns leri seçip etkinleştir
+
+ssl sertifika ekle
+
+db ekle
+
+
+Host
+.\MSSQLSERVER2019
+
+Veritabanı adı
+barissam_keepnotedb
+
+Kullanıcı Adı
+barissam_keepnote
+
+Şifre
+6Q^9m5hv9
+
+server=.\MSSQLSERVER2019;database=barissam_keepnotedb;uid=barissam_keepnote;pwd=Q^9m5hv9
+
+vs den sln yi aç
+
+folder publsh et
+
+publish ayarlarına connectionstringi ver publish et
+
+publish içinde web.config içine yaz
+
+    <system.webServer>
+<modules runAllManagedModulesForAllRequests="true">
+	<remove name="WebDAVModule"/> <!-- ADD THIS -->
+</modules>
+      <handlers>
+
+klasörü ziple filezilla içinde açılan domain içine at
+
+ssms ten db yi aç
+
+vs içinde script-migration yap
+
+new query ile gelen kodlarla tabloları oluştur
+
+
+vs code next.config.js içini
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export",
+  env: {
+    apiURL: 'https://keepnoteapi.barissamur.com/api/notes',
+  }
+}
+
+module.exports = nextConfig
+
+
+
+
+
+

@@ -23,6 +23,55 @@ export default function Home() {
 
   }, []);
 
+  const addNewNote = () => {
+    fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: 'New Note',
+        content: ''
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setNotes([...notes, data]);
+        setSelected({ ...data });
+      });
+  };
+
+  const deleteNote = () => {
+    fetch(`${apiURL}/${selected.id}`, {
+      method: 'DELETE'
+    })
+      .then(res => {
+        if (res.ok) {
+          setNotes(notes.filter(note => note.id != selected.id));
+          setSelected(null);
+        }
+      });
+  };
+
+  const saveNote = (e) => {
+    e.preventDefault();
+    fetch(`${apiURL}/${selected.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selected)
+    })
+      .then(res => {
+        if (res.ok) {
+          setNotes(notes.map(note => note.id == selected.id ? { ...selected } : note));
+        }
+      });
+  };
+
+
+
+
   return (
     <>
       <Head>
@@ -44,7 +93,7 @@ export default function Home() {
           <Row>
             <Col sm="4" lg="3">
 
-              <Button variant="primary" className='w-100'>
+              <Button variant="primary" className='w-100' onClick={addNewNote}>
                 <FontAwesomeIcon icon={faPlus} />
                 New Note
               </Button>
@@ -63,19 +112,21 @@ export default function Home() {
 
               {/* // selected varsa formu göster */}
               {selected &&
-                <Form>
+                <Form onSubmit={saveNote}>
                   <Form.Group className="mb-2">
-                    <Form.Control type="text" placeholder="Enter title" value={selected.title} />
+                    <Form.Control type="text" placeholder="Enter title" value={selected.title}
+                      onChange={(e) => setSelected({ ...selected, title: e.target.value })} required />
                   </Form.Group>
                   <Form.Group className="mb-2">
-                    <Form.Control type="text" as='textarea' rows='12' placeholder="Write something.." value={selected.content ?? ""} />
+                    <Form.Control type="text" as='textarea' rows='12' placeholder="Write something.." value={selected.content ?? ""}
+                      onChange={(e) => setSelected({ ...selected, content: e.target.value })} />
                   </Form.Group>
                   <div>
                     <Button variant="primary" type="submit" className='me-2'>
                       <FontAwesomeIcon icon={faFloppyDisk} /> {" "}
                       Save
                     </Button>
-                    <Button variant="danger" type="submit">
+                    <Button variant="danger" type="submit" onClick={deleteNote}>
                       <FontAwesomeIcon icon={faTrash} /> {" "}
                       Delete
                     </Button>
